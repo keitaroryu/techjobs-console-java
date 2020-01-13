@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -51,7 +49,10 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        return allJobs;
+        //Returns Copy of allJobs ArrayList
+        ArrayList<HashMap<String, String>> allJobsList = new ArrayList<>(allJobs);
+
+        return allJobsList;
     }
 
     /**
@@ -74,11 +75,42 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase(); //toLowerCase for case-insensitivity
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(value.toLowerCase())) {    //toLowerCase for case-insensitivity
                 jobs.add(row);
             }
+        }
+
+        return jobs;
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+
+            String jobAdded = "no";
+
+            for(Map.Entry<String, String> column : row.entrySet()) {
+
+                if(jobAdded.equals("yes")) {
+                    break;
+                }
+
+                String aValue = column.getValue().toLowerCase();    //toLowerCase for case-insensitivity
+
+                if (aValue.contains(value.toLowerCase())) {         //toLowerCase for case-insensitivity
+                    jobs.add(row);
+                    jobAdded = "yes";
+                }
+
+            }
+
         }
 
         return jobs;

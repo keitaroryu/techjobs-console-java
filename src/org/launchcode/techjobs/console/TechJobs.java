@@ -1,8 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -43,12 +41,19 @@ public class TechJobs {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
 
+                    //Sorts Column List in Ascending Order
+                    Collections.sort(results);
+
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
                     // Print list of skills, employers, etc
                     for (String item : results) {
                         System.out.println(item);
                     }
+
+                    //Extra Code. Brian N.
+                    System.out.println("\n" + results.size() + " results found.");
+
                 }
 
             } else { // choice is "search"
@@ -61,7 +66,7 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -110,7 +115,25 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+        if(!(someJobs.isEmpty())) {
+            for (HashMap<String, String> job : someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+                System.out.println("\n*****");
+
+                for (Map.Entry<String, String> column : job.entrySet()) {
+                    System.out.println(column.getKey() + ": " + column.getValue());
+                }
+
+                System.out.println("*****");
+            }
+
+            //Extra Code. Brian N.
+            System.out.println("\n" + someJobs.size() + " results found.");
+
+        } else {
+
+            System.out.println("No results.");
+
+        }
     }
 }
